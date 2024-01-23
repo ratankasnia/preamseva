@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+    />
+  
+    <link rel="stylesheet" href="./google-translate.css" />
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+
+    <script>
+      const googleTranslateConfig = {
+        lang: "en", 
+      };
+
+      function TranslateInit() {
+        let code = TranslateGetCode();
+        // Находим флаг с выбранным языком для перевода и добавляем к нему активный класс
+        $('[data-google-lang="' + code + '"]').addClass("language__img_active");
+
+        if (code == googleTranslateConfig.lang) {
+          // Если язык по умолчанию, совпадает с языком на который переводим
+          // То очищаем куки
+          TranslateClearCookie();
+        }
+
+        // Инициализируем виджет с языком по умолчанию
+        new google.translate.TranslateElement({
+          pageLanguage: googleTranslateConfig.lang,
+        });
+
+        // Вешаем событие  клик на флаги
+        $("[data-google-lang]").click(function () {
+          TranslateSetCookie($(this).attr("data-google-lang"));
+          window.location.reload();
+        });
+        $("#sort").change(function () {
+          TranslateSetCookie($(this).val());
+          window.location.reload();
+        });
+      }
+
+      function TranslateGetCode() {
+        // Если куки нет, то передаем дефолтный язык
+        let lang =
+          $.cookie("googtrans") != undefined && $.cookie("googtrans") != "null"
+            ? $.cookie("googtrans")
+            : googleTranslateConfig.lang;
+        return lang.substr(-2);
+      }
+
+      function TranslateClearCookie() {
+        $.cookie("googtrans", null);
+        $.cookie("googtrans", null, {
+          domain: "." + document.domain,
+        });
+      }
+
+      function TranslateSetCookie(code) {
+        // Записываем куки /язык_который_переводим/язык_на_который_переводим
+        $.cookie("googtrans", "/auto/" + code);
+        $.cookie("googtrans", "/auto/" + code, {
+          domain: "." + document.domain,
+        });
+      }
+    </script>
+    <title>prem seva</title>
+    <script src="//translate.google.com/translate_a/element.js?cb=TranslateInit"></script>
+    <style>
+      #sort {
+        -o-appearance: none;
+        -ms-appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+      }
+
+      .skiptranslate {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <select
+      id="sort"
+      style="
+        z-index: 1000;
+        right: 14%;
+        top: 40px;
+        background-size: 100%;
+        background-repeat: no-repeat;
+        background-size: 20px;
+        background-color: transparent;
+        position: fixed;
+        background-image: url(https://play-lh.googleusercontent.com/ZrNeuKthBirZN7rrXPN1JmUbaG8ICy3kZSHt-WgSnREsJzo2txzCzjIoChlevMIQEA);
+      "
+    >
+      <option value=""></option>
+      <option value="hi">Hindi</option>
+      <option value="en">English</option>
+      <option value="mr">Marathi</option>
+      <option value="ml">Malayalam</option>
+      <option value="ta">Tamil</option>
+      <option value="te">Telugu</option>
+      <option value="ur">Urdu</option>
+      <option value="gu">Gujarati</option>
+      <option value="kn">Kannada</option>
+    </select>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
