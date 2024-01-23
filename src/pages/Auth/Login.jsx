@@ -51,7 +51,7 @@ function Login() {
               onSubmit={formik.handleSubmit}
             >
               <div className="w-full">
-                <label>Email</label>
+                <label>Email*</label>
                 <input
                   className="placeholder:text-primary-green border-primary-green w-full rounded-md border px-3 py-2"
                   placeholder="email"
